@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> common/meta}}
+    {{> common/css}}
+    <link href="/assets/css/toastr.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="/src/plugins/jquery-steps/jquery.steps.css" />
+
+    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/assets/vendor/libs/jquery/jquery-validator.js"></script>
+    <script src="/assets/js/sweetalert2.all.min.js"></script>
+    <script src="/assets/vendor/libs/jquery/toastr.min.js"></script>
+</head>
+
+<body>
+    {{{body}}}
+
+    <script src="/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="/vendors/scripts/steps-setting.js"></script>
+
+    {{#if flash}}
+    {{{flashMe flash}}}
+    {{/if}}
+
+    {{{_sections.script}}}
+</body>
+
+</html>

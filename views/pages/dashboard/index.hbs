@@ -1,0 +1,62 @@
+<h1>DSA Topics</h1>
+{{#each topics}}
+<div>
+    <h2>{{title}} ({{level}})</h2>
+    <ul>
+        {{#each subtopics}}
+        <li>
+            <input type="checkbox" id="{{_id}}" {{#if (includes ../../completedTopics _id)}}checked{{/if}} />
+            <label for="{{_id}}">
+                <strong>{{name}}</strong>: {{description}}
+            </label>
+            <ul>
+                <li><a href="{{youtubeLink}}" target="_blank">YouTube Tutorial</a></li>
+                <li><a href="{{leetcodeLink}}" target="_blank">LeetCode Problem</a></li>
+                <li><a href="{{articleLink}}" target="_blank">Article</a></li>
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+</div>
+{{/each}}
+
+<script>
+    document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', async (e) => {
+            const subtopicId = e.target.id;
+            const isChecked = e.target.checked;
+
+            // Prevent unchecking
+            if (!isChecked) {
+                e.target.checked = true; // Revert the state to checked
+                return;
+            }
+
+            // Call the API to update the user data
+            try {
+                console.log("🚀 ~ checkbox.addEventListener ~ subtopicId:", subtopicId)
+                const response = await fetch('/update-completed', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ subtopicId }),
+                });
+
+                console.log("🚀 ~ checkbox.addEventListener ~ response:", response)
+                if (!response.ok) {
+                    throw new Error('Failed to update completed topics');
+                }
+
+                const data = await response.json();
+
+                // Disable the checkbox after successful update
+                e.target.disabled = true;
+            } catch (error) {
+                console.error('Error:', error.message);
+                alert('An error occurred while updating. Please try again.');
+                e.target.checked = false; // Revert the state to unchecked
+            }
+        });
+    });
+</script>
