@@ -1,9 +1,8 @@
-
-68 B
 node_modules
 logs
 .git
 .gitignore
 .project
 .settings
+data
 Dockerfile

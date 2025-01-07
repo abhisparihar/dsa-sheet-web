@@ -1,6 +1,17 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    container_name: dsa-sheet
+    restart: always
+    links:
+      - mongodb
+    ports:
+      - "3000:3000"  # Expose the app on port 3000
+    depends_on:
+      - mongodb
+
   mongodb:
     image: mongo:6.0
     container_name: mongodb
@@ -12,28 +23,4 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: admin
       MONGO_INITDB_DATABASE: admin
     volumes:
-      - mongodb_data:/data/db
-    networks:
-      - dsa_network
-
-  app:
-    build: .
-    container_name: dsa-sheet
-    restart: always
-    ports:
-      - "3000:3000"  # Expose the app on port 3000
-    env_file:
-      - .env  # Reference the .env file here
-    volumes:
-      - .:/app
-    depends_on:
-      - mongodb
-    networks:
-      - dsa_network
-
-volumes:
-  mongodb_data:
-
-networks:
-  dsa_network:
-    driver: bridge
+      - ./data/mongo:/data/db
