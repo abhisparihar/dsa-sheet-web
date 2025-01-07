@@ -2,38 +2,38 @@ version: '3.8'
 
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo:6.0
     container_name: mongodb
     restart: always
     ports:
-      - "27017:27017"
+      - "27021:27017"  # Expose MongoDB on port 27021 for your app
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_DATABASE: myprojectdb
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: admin
     volumes:
       - mongodb_data:/data/db
     networks:
-      - mynetwork
+      - dsa_network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: app
+    build: .
+    container_name: dsa-sheet
     restart: always
-    environment:
-      MONGO_URI: mongodb://root:example@mongodb:27017/myprojectdb?authSource=admin
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Expose the app on port 3000
+    env_file:
+      - .env  # Reference the .env file here
+    volumes:
+      - .:/app
     depends_on:
       - mongodb
     networks:
-      - mynetwork
+      - dsa_network
 
 volumes:
   mongodb_data:
 
 networks:
-  mynetwork:
+  dsa_network:
     driver: bridge
