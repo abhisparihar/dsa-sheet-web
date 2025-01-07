@@ -25,7 +25,9 @@ const postLogin = async function (req, res, next) {
         //if user not found
         if (!user) {
             authLog.warn("Invalid user login attempt");
-            return req.flash('error', responseMessages['invalidUser']);
+            req.flash('error', responseMessages['invalidUser']);
+            res.redirect('/login');
+            return;
         }
         //log in user
         req.logIn(user, async function (err) {
